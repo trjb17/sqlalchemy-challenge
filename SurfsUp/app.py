@@ -1,11 +1,12 @@
 # Import the dependencies
 from flask import Flask, jsonify
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, func
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
-import numpy as np  # Import numpy for np.ravel()
+import numpy as np
 import pandas as pd
 import datetime as dt
+
 #################################################
 # Database Setup
 #################################################
@@ -79,7 +80,8 @@ def tobs():
     # Calculate the date 1 year ago from the last data point in the database
     prev_year = dt.date(2017, 8, 23) - dt.timedelta(days=365)
     
-    # Query to retrieve the temperature observations of the most active station for the previous year of data
+    # Query to retrieve the temperature observations of the station USC00519281 for the previous year of data
+    most_active_station = "USC00519281"
     results = session.query(Measurement.date, Measurement.tobs).\
         filter(Measurement.station == most_active_station).\
         filter(Measurement.date >= prev_year).all()
